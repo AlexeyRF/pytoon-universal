@@ -28,10 +28,11 @@ class FrameSequence:
 class animate:
     """Animates a cartoon that is lip synced to provieded audio voiceover."""
 
-    def __init__(self, audio_file: str, transcript: str = None, fps: int = 48):
+    def __init__(self, audio_file: str, transcript: str = None, fps: int = 48, assets_path: str = None):
         self.audio_file = audio_file
         self.sequence = FrameSequence()
-        self.assets = get_assets()
+        self.assets_path = assets_path
+        self.assets = get_assets(base_path=self.assets_path)
         self.fps = fps
         self.final_frames = []
 
@@ -39,7 +40,7 @@ class animate:
         self.blink_rate = 3.0
 
         # Create sequence of mouth images
-        self.viseme_sequence = viseme_sequencer(self.audio_file, transcript, self.fps)
+        self.viseme_sequence = viseme_sequencer(self.audio_file, transcript, self.fps, base_path=self.assets_path)
         self.build_mouth_sequence()
 
         self.duration = len(self.sequence.mouth_files) / self.fps
@@ -69,7 +70,10 @@ class animate:
             self.sequence.mouth_coords.append(pose.mouth_coordinates)
 
         # Prepend absolute path to all pose images
-        self.sequence.pose_files = [f"{os.path.dirname(__file__)}{file}" for file in self.sequence.pose_files]
+        if self.assets_path:
+            self.sequence.pose_files = [os.path.join(self.assets_path, file.lstrip("/")) for file in self.sequence.pose_files]
+        else:
+             raise ValueError("assets_path must be provided since local assets have been removed.")
 
         # Create mouth PIL image for every frame, with image transformations based on pose
         for i, _ in enumerate(self.sequence.mouth_files):
@@ -126,7 +130,10 @@ class animate:
         # Prepend absolute path to mouth images
         for i, _ in enumerate(self.sequence.mouth_files):
             file = self.sequence.mouth_files[i]
-            new_file = f"{os.path.dirname(__file__)}/assets/visemes/positive/{file}"
+            if self.assets_path:
+                new_file = os.path.join(self.assets_path, "visemes", "positive", file)
+            else:
+                raise ValueError("assets_path must be provided since local assets have been removed.")
             self.sequence.mouth_files[i] = new_file
 
     def random_emotion(self):

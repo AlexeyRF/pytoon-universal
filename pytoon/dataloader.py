@@ -36,13 +36,16 @@ class Emotions:
 #confused: list[Pose]  # List of poses for the sad emotion.
 
 
-def get_assets() -> Emotions:
+def get_assets(base_path: str = None) -> Emotions:
     """Loads pose data from json file and returns as a dictionary.
 
+    Args:
+        base_path (str, optional): Base directory for the assets.
+
     Returns:
-        dict: Pose data, including paths to images, emotion specific poses, and mouth coords.
+        Emotions: Pose data, including paths to images, emotion specific poses, and mouth coords.
     """
-    pose_data = read_json(file="pose_data.json")["emotions"]
+    pose_data = read_json(file="pose_data.json", base_path=base_path)["emotions"]
 
     emotions = {}
     for emotion in pose_data.keys():

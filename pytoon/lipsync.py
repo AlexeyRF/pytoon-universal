@@ -9,11 +9,13 @@ import re
 # Viseme image for silence (i.e. closed mouth, not speaking)
 SILENT_VISEME = "9.png"
 SILENT_PHONEME = "PAUSE"
-# ARPAbet phonemes to simplified phonemes mapping
-PHONEMES = read_json("phonemes.json")
-# Simplified phonemes to viseme-sequence mapping
-VISEMES = read_json("visemes.json")
 
+def get_phonemes_and_visemes(base_path: str = None):
+    # ARPAbet phonemes to simplified phonemes mapping
+    phonemes = read_json("phonemes.json", base_path=base_path)
+    # Simplified phonemes to viseme-sequence mapping
+    visemes = read_json("visemes.json", base_path=base_path)
+    return phonemes, visemes
 
 @dataclass
 class WordViseme:
@@ -27,17 +29,21 @@ class WordViseme:
     breath: bool
 
 
-def viseme_sequencer(audio_file: str, transcript: str = None, fps: int = 48) -> list[WordViseme]:
+def viseme_sequencer(audio_file: str, transcript: str = None, fps: int = 48, base_path: str = None) -> list[WordViseme]:
     """Converts and audio / txt file to force aligned viseme sequence
 
     Args:
         audio_file (str): Path to audio file of a person speaking english (.wav or .mp3)
         transcript (str): (optional) Trascript string of audio recording
             - If not transcript is provided, it will automatically detect with speech to text
+        fps (int): Frames per second of the video
+        base_path (str, optional): Base directory for the assets.
 
     Returns:
         list[WordViseme]: A list of force aligned WordViseme objects
     """
+    phonemes_data, visemes_data = get_phonemes_and_visemes(base_path=base_path)
+    
     ENDING_SILENCE_SECONDS = 2.5
     # Provide path to audio_file and corresponding txt_file with audio transcript
     aligner = ForceAlign(audio_file=audio_file, transcript=transcript)
@@ -56,7 +62,7 @@ def viseme_sequencer(audio_file: str, transcript: str = None, fps: int = 48) -> 
     viseme_sequence = []
     for word in words:
         phonemes = [phoneme_no_stress(phoneme) for phoneme in word.phonemes]
-        images = [phoneme_to_viseme(phoneme=phoneme) for phoneme in phonemes]
+        images = [phoneme_to_viseme(phoneme=phoneme, phonemes_map=phonemes_data, visemes_map=visemes_data) for phoneme in phonemes]
         duration = word.time_end - word.time_start
         total_frames = int((duration / total_duration) * target_frames)
 
@@ -163,18 +169,20 @@ def phoneme_no_stress(phoneme: str) -> str:
         return phoneme
 
 
-def phoneme_to_viseme(phoneme: str) -> list[str]:
+def phoneme_to_viseme(phoneme: str, phonemes_map: dict, visemes_map: dict) -> list[str]:
     """Converts a phoneme to a viseme image sequence
 
     Args:
         phoneme (str): An ARPAbet phoneme
+        phonemes_map (dict): ARPAbet phonemes to simplified phonemes mapping
+        visemes_map (dict): Simplified phonemes to viseme-sequence mapping
 
     Returns:
-        str: A list of images files for the viseme
+        list[str]: A list of images files for the viseme
     """
     phoneme = phoneme_no_stress(phoneme=phoneme)
-    simplified_phone = PHONEMES[phoneme]
-    viseme = VISEMES[simplified_phone]
+    simplified_phone = phonemes_map[phoneme]
+    viseme = visemes_map[simplified_phone]
     return viseme
 
 

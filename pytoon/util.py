@@ -5,31 +5,41 @@ from scipy.signal import resample
 import numpy as np
 
 
-def read_json(file: str) -> dict:
+def read_json(file: str, base_path: str = None) -> dict:
     """Reads a json file to dictionary
 
     Args:
-        path (str): Path to the json file.
+        file (str): Filename or path to the json file.
+        base_path (str, optional): Base directory for the assets.
 
     Returns:
         dict: Python dictionary with json data.
     """
-    path = f"{os.path.dirname(__file__)}/assets/{file}"
-    with open(path, "r") as file:
-        data = json.load(file)
+    if base_path:
+        path = os.path.join(base_path, file)
+    else:
+        path = os.path.join(os.path.dirname(__file__), "assets", file)
+    
+    with open(path, "r") as f:
+        data = json.load(f)
     return data
 
 
-def write_json(data: dict, file: str) -> None:
+def write_json(data: dict, file: str, base_path: str = None) -> None:
     """Writes a Python dictionary to a json file.
 
     Args:
         data (dict): Python dictionary with data.
-        path (str): The path to the output json file.
+        file (str): Filename or path to the json file.
+        base_path (str, optional): Base directory for the assets.
     """
-    path = f"{os.path.dirname(__file__)}/assets/{file}"
-    with open(path, "w") as file:
-        json.dump(data, file, indent=4)
+    if base_path:
+        path = os.path.join(base_path, file)
+    else:
+        path = os.path.join(os.path.dirname(__file__), "assets", file)
+        
+    with open(path, "w") as f:
+        json.dump(data, f, indent=4)
 
 
 def resample_audio(
