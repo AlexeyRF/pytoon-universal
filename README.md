@@ -12,10 +12,6 @@ PyToon is a Python-based animation library for automatically animating character
 
 **Note on Current Version:** To keep the package lightweight and flexible, animation assets (character poses and mouth shapes) are no longer bundled with the library. You must provide a path to an assets folder when initializing the `animate` class. This allows you to easily swap characters and styles.
 
-[Example Output Video](https://www.youtube.com/watch?v=Sg2OBBNwF-k&ab_channel=LKerbs)
-
-**Installation:** `pip install pytoon`
-
 ### Features
 - Automatically create cartoon animated lip-sync videos from just an audio file.
 - Use a provided transcript or let PyToon automatically generate the transcript from the audio with built-in text-to-speech.
@@ -26,7 +22,7 @@ PyToon is a Python-based animation library for automatically animating character
 - Fast Processing! A 60-second lip-sync animation clip takes ~39 seconds to generate.
 
 ### Getting Started 
-1. Install pytoon: `pip3 install pytoon`
+1. Install pytoon-universal
 2. Install ffmpeg:
     - Mac: `brew install ffmpeg`
     - Linux: `sudo apt install ffmpeg`
@@ -79,17 +75,13 @@ animation.export(path='video_auto_transcript.mp4', background=background_video, 
 ## Русский
 
 ### Обзор
-PyToon — это библиотека для анимации на языке Python, предназначенная для автоматического создания анимации персонажей и движений их рта на основе аудиофайла (.mp3 или .wav). ??нструмент использует методы анализа звука на базе машинного обучения для автоматической синхронизации губ (lip-sync) анимированного персонажа с записью речи.
+PyToon - это библиотека для анимации на языке Python, предназначенная для автоматического создания анимации персонажей и движений их рта на основе аудиофайла (.mp3 или .wav). Инструмент использует методы анализа звука на базе машинного обучения для автоматической синхронизации губ (lip-sync) анимированного персонажа с записью речи.
 
 **Особенности текущей версии:** Для минимизации размера пакета и повышения гибкости, ассеты анимации (позы персонажей и формы рта) больше не поставляются вместе с библиотекой. При инициализации класса `animate` необходимо указать путь к папке с ассетами (`assets_path`). Это позволяет легко менять персонажей и стили анимации.
 
-[Пример видео](https://www.youtube.com/watch?v=Sg2OBBNwF-k&ab_channel=LKerbs)
-
-**Установка:** `pip install pytoon`
-
 ### Возможности
 - Автоматическое создание анимации синхронизации губ на основе аудиофайла.
-- ??спользование готового текста или его автоматическая генерация из аудио с помощью встроенной системы распознавания речи.
+- Использование готового текста или его автоматическая генерация из аудио с помощью встроенной системы распознавания речи.
 - Программное создание видеороликов.
 - Наложение анимации на фоновое видео или изображения.
 - Кроссплатформенность: работает на Mac, Windows и Linux.
@@ -97,7 +89,7 @@ PyToon — это библиотека для анимации на языке P
 - Высокая скорость работы: 60-секундный ролик создается примерно за 39 секунд.
 
 ### Начало работы
-1. Установите pytoon: `pip3 install pytoon`
+1. Установите pytoon-universal
 2. Установите ffmpeg:
     - Mac: `brew install ffmpeg`
     - Linux: `sudo apt install ffmpeg`
@@ -145,10 +137,3 @@ animation.export(path='video_auto_transcript.mp4', background=background_video, 
 ```
 
 ---
-
-## Contributing / Участие в разработке
-(See English version for detailed steps)
-
-## Acknowledgements / Благодарности
-This project uses character images open sourced by: [GitHub: lazykh](https://github.com/carykh/lazykh)
-You can check out his YouTube channel here: [YouTube: carykh](https://youtube.com/@carykh)
