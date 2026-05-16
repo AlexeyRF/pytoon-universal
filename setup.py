@@ -18,11 +18,11 @@ setup(
         "numpy",
         "pillow",
     ],
-    author="Luke Kerbs",
+    author="Luke Kerbs + AlexeyRF",
     description="A Python library for lip-syncing cartoons to voice recordings.",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/lukerbs/apple",
+    url="https://github.com/AlexeyRF/pytoon-universal",
     keywords=[
         "animation",
         "forced alignment",
